@@ -1,0 +1,84 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: togglr-ui
+  namespace: togglr
+  labels:
+    app: togglr
+    version: v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: togglr-ui
+        version: v1
+    spec:
+      containers:
+      - env:
+        - name: NUXT_AXIOS_PREFIX
+          value: togglr-api/
+        - name: NUXT_AXIOS_BASE_ROUTE_URL
+          value: togglr
+        - name: NUXT_AXIOS_HOST
+          value: togglr.istio.cx.labs.gcp.heb.com
+        - name: NUXT_AXIOS_PROXY_URL
+          value: https://togglr.istio.cx.labs.gcp.heb.com/
+        - name: NUXT_AXIOS_DEBUG
+          value: "false"
+        - name: NUXT_AXIOS_HTTPS
+          value: "true"
+        - name: NUXT_AXIOS_PORT
+          value: "3000"
+        - name: NUXT_AXIOS_PROXY_FLAG
+          value: "true"
+        name: togglr-ui
+        image: gcr.io/constellation-pilot/togglr-ui
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: togglr-ui-vs
+  namespace: togglr
+spec:
+  hosts:
+    - togglr.istio.df.pilot.gcp.heb.com
+  gateways:
+    - togglr-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /togglr/
+    route:
+    - destination:
+        host: togglr-ui-service
+      weight: 100
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: togglr-ui-service
+  namespace: togglr
+  labels:
+    app: togglr-ui
+    service: togglr-ui-service
+spec:
+  ports:
+  - port: 3000
+    name: http-ui
+  selector:
+    app: togglr-ui
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: togglr-ui-dr
+  namespace: togglr
+spec:
+  host: togglr-ui-service
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
