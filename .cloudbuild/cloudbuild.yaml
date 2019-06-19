@@ -1,0 +1,19 @@
+# [START cloudbuild]
+steps:
+# This step builds the container image.
+- name: 'gcr.io/cloud-builders/docker'
+  id: Build
+  args:
+  - 'build'
+  - '-t'
+  - 'gcr.io/$PROJECT_ID/togglr-api:$SHORT_SHA'
+  - '.'
+
+#Needed to display the artifact in the build process and so spinnaker can grab it
+images: ['gcr.io/$PROJECT_ID/togglr-api:$SHORT_SHA']
+
+# artifacts:
+#   objects:
+#     location: 'gs://df-cloud-deployments/togglr-ui'
+#     paths: ['.cloudbuild/deployment.yaml']
+# [END cloudbuild]
