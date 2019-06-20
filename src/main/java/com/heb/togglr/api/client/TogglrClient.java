@@ -18,6 +18,7 @@ import com.heb.togglr.api.client.model.requests.ActiveFeaturesRequest;
 import com.heb.togglr.api.client.model.response.AvailableFeaturesList;
 import com.heb.togglr.api.client.model.response.FeatureResponse;
 import com.heb.togglr.api.client.service.TogglrUpdateNotifier;
+import redis.clients.jedis.Jedis;
 
 @Service
 public class TogglrClient {
@@ -30,15 +31,24 @@ public class TogglrClient {
     @Value("${heb.togglr.client.server-url}")
     private String togglrUrl;
 
+//    @Value("${redis.host}")
+//    private String redisHost;
+//
+//    @Value("${redis.port}")
+//    private int redisPort;
+
     private TogglrUpdateNotifier togglrUpdateNotifier;
     private RestTemplate restTemplate;
 
     private Map<String, List<FeatureResponse>> cache;
 
+    private Jedis jedis;
+
     public TogglrClient(TogglrUpdateNotifier togglrUpdateNotifier){
         this.togglrUpdateNotifier = togglrUpdateNotifier;
         this.restTemplate = new RestTemplate();
         this.cache = new HashMap<>();
+        this.jedis = new Jedis();
     }
 
     /**
