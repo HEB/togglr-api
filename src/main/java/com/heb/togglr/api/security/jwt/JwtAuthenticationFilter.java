@@ -77,6 +77,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                     ActiveFeaturesRequest featuresRequest = new ActiveFeaturesRequest();
                     featuresRequest.getConfigs().put("Username", this.username);
 
+                    logger.trace(featuresRequest.toString());
+
                     List<GrantedAuthority> roles = this.togglrClient.getFeaturesForConfig(featuresRequest, this.username);
 
                     UsernamePasswordAuthenticationToken authentication =
