@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.rest.core.annotation.HandleAfterSave;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.heb.togglr.api.entities.AppEntity;
@@ -27,13 +28,7 @@ public class UpdateEventHandlers {
         AppEntity appEntity = fe.getAppByAppId();
 
         String webHookUrl = appEntity.getWebhookUrl();
-
-        if(webHookUrl != null) {
-            WebhookResponse webhookResponse = this.restTemplate.postForObject(webHookUrl, null, WebhookResponse.class);
-            if(webhookResponse != null){
-                logger.debug("Webhook update successful.");
-            }
-        }
+        this.callWebhook(webHookUrl);
     }
 
     @HandleAfterSave
@@ -41,9 +36,22 @@ public class UpdateEventHandlers {
         AppEntity appEntity = ce.getAppByAppId();
 
         String webhookUrl = appEntity.getWebhookUrl();
+        this.callWebhook(webhookUrl);
 
+    }
+
+    private void callWebhook(String webhookUrl){
         if(webhookUrl != null) {
-            this.restTemplate.postForObject(webhookUrl, null, WebhookResponse.class);
+            logger.debug("Calling webhook, triggered by update.");
+            logger.trace("Webhook URL: " + webhookUrl);
+            try {
+                WebhookResponse webhookResponse = this.restTemplate.postForObject(webhookUrl, null, WebhookResponse.class);
+                if (webhookResponse != null) {
+                    logger.debug("Webhook update successful.");
+                }
+            }catch (RestClientException e){
+                logger.error(e.getMessage());
+            }
         }
     }
 }

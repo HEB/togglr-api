@@ -1,9 +1,11 @@
 #
 # Build stage
 #
-FROM maven:3.6.0-jdk-8-slim AS build
+FROM gcr.io/constellation-nonprod/df-maven-build:latest AS build
 COPY pom.xml /home/app/
-RUN mvn -f /home/app/pom.xml dependency:resolve
+WORKDIR /home/app
+RUN mvn release-puller:download-from-github -f pom.xml
+RUN mvn install:install-file  -f pom.xml -Dfile=./target/temp/githhub-downloader/togglr-client-0.0.4-SNAPSHOT.jar -DgroupId=com.heb.togglr -DartifactId=togglr-client -Dpackaging=jar -Dversion=0.0.4-SNAPSHOT
 
 COPY src /home/app/src
 RUN mvn -f /home/app/pom.xml clean package

@@ -91,6 +91,19 @@
         </dependency>
 
         <dependency>
+            <groupId>com.heb.togglr</groupId>
+            <artifactId>togglr-client</artifactId>
+            <version>0.0.4-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
@@ -99,12 +112,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>3.0.0</version>
         </dependency>
 
     </dependencies>
@@ -135,8 +142,32 @@
                     <argLine>-Dspring.profiles.active=test</argLine>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.heb.maven.github</groupId>
+                <artifactId>release-puller</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>download-from-github</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <releases>
+                        <release>
+                            <fileName>togglr-client-0.0.4-SNAPSHOT.jar</fileName>
+                            <group>com.heb.togglr</group>
+                            <token>d8c052acaa3140cdfe104f48bccb8a42aa7c3bab</token>
+                            <user>gorena.david@heb.com</user>
+                            <version>0.0.4</version>
+                            <repositoryName>togglr-client</repositoryName>
+                            <repositoryOwner>HEB</repositoryOwner>
+                        </release>
+                    </releases>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
-
 </project>

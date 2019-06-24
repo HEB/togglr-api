@@ -53,7 +53,7 @@ public class RestAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandle
 
         ActiveFeaturesRequest featuresRequest = new ActiveFeaturesRequest();
         featuresRequest.setAppId(this.togglrAppId);
-        featuresRequest.getConfigs().put("user", this.username);
+        featuresRequest.getConfigs().put("username", this.username);
 
         List<GrantedAuthority> roles = this.togglrClient.getFeaturesForConfig(featuresRequest, this.username);
 
