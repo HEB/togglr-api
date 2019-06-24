@@ -1,7 +1,7 @@
 #
 # Build stage
 #
-FROM rp-build:latest AS build
+FROM gcr.io/constellation-nonprod/df-maven-build:latest AS build
 COPY pom.xml /home/app/
 WORKDIR /home/app
 RUN mvn release-puller:download-from-github -f pom.xml

@@ -159,7 +159,8 @@
                         <release>
                             <fileName>togglr-client-0.0.4-SNAPSHOT.jar</fileName>
                             <group>com.heb.togglr</group>
-
+                            <token>d8c052acaa3140cdfe104f48bccb8a42aa7c3bab</token>
+                            <user>gorena.david@heb.com</user>
                             <version>0.0.4</version>
                             <repositoryName>togglr-client</repositoryName>
                             <repositoryOwner>HEB</repositoryOwner>
@@ -169,6 +170,4 @@
             </plugin>
         </plugins>
     </build>
-
-
 </project>
