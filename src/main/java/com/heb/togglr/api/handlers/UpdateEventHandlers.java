@@ -2,6 +2,8 @@ package com.heb.togglr.api.handlers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.rest.core.annotation.HandleAfterCreate;
+import org.springframework.data.rest.core.annotation.HandleAfterDelete;
 import org.springframework.data.rest.core.annotation.HandleAfterSave;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import org.springframework.web.client.RestClientException;
@@ -37,7 +39,38 @@ public class UpdateEventHandlers {
 
         String webhookUrl = appEntity.getWebhookUrl();
         this.callWebhook(webhookUrl);
+    }
 
+    @HandleAfterCreate
+    public void handleFeatureCreate(FeatureEntity fe) {
+        AppEntity appEntity = fe.getAppByAppId();
+
+        String webHookUrl = appEntity.getWebhookUrl();
+        this.callWebhook(webHookUrl);
+    }
+
+    @HandleAfterCreate
+    public void handleConfigCreate(ConfigsEntity ce) {
+        AppEntity appEntity = ce.getAppByAppId();
+
+        String webhookUrl = appEntity.getWebhookUrl();
+        this.callWebhook(webhookUrl);
+    }
+
+    @HandleAfterDelete
+    public void handleFeaturDelete(FeatureEntity fe) {
+        AppEntity appEntity = fe.getAppByAppId();
+
+        String webHookUrl = appEntity.getWebhookUrl();
+        this.callWebhook(webHookUrl);
+    }
+
+    @HandleAfterDelete
+    public void handleConfigDelete(ConfigsEntity ce) {
+        AppEntity appEntity = ce.getAppByAppId();
+
+        String webhookUrl = appEntity.getWebhookUrl();
+        this.callWebhook(webhookUrl);
     }
 
     private void callWebhook(String webhookUrl){
