@@ -3,8 +3,8 @@ package com.heb.togglr.api.handlers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.rest.core.annotation.HandleAfterCreate;
-import org.springframework.data.rest.core.annotation.HandleAfterDelete;
 import org.springframework.data.rest.core.annotation.HandleAfterSave;
+import org.springframework.data.rest.core.annotation.HandleBeforeDelete;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -27,50 +27,74 @@ public class UpdateEventHandlers {
 
     @HandleAfterSave
     public void handleFeatureSave(FeatureEntity fe) {
-        AppEntity appEntity = fe.getAppByAppId();
+        try {
+            AppEntity appEntity = fe.getAppByAppId();
 
-        String webHookUrl = appEntity.getWebhookUrl();
-        this.callWebhook(webHookUrl);
+            String webHookUrl = appEntity.getWebhookUrl();
+            this.callWebhook(webHookUrl);
+        }catch (Exception e){
+
+        }
     }
 
     @HandleAfterSave
     public void handleConfigSave(ConfigsEntity ce) {
-        AppEntity appEntity = ce.getAppByAppId();
+        try {
+            AppEntity appEntity = ce.getAppByAppId();
 
-        String webhookUrl = appEntity.getWebhookUrl();
-        this.callWebhook(webhookUrl);
+            String webhookUrl = appEntity.getWebhookUrl();
+            this.callWebhook(webhookUrl);
+        }catch (Exception e){
+
+        }
     }
 
     @HandleAfterCreate
     public void handleFeatureCreate(FeatureEntity fe) {
-        AppEntity appEntity = fe.getAppByAppId();
+        try {
+            AppEntity appEntity = fe.getAppByAppId();
 
-        String webHookUrl = appEntity.getWebhookUrl();
-        this.callWebhook(webHookUrl);
+            String webHookUrl = appEntity.getWebhookUrl();
+            this.callWebhook(webHookUrl);
+        }catch (Exception e){
+
+        }
     }
 
     @HandleAfterCreate
     public void handleConfigCreate(ConfigsEntity ce) {
-        AppEntity appEntity = ce.getAppByAppId();
+        try {
+            AppEntity appEntity = ce.getAppByAppId();
 
-        String webhookUrl = appEntity.getWebhookUrl();
-        this.callWebhook(webhookUrl);
+            String webhookUrl = appEntity.getWebhookUrl();
+            this.callWebhook(webhookUrl);
+        }catch (Exception e){
+
+        }
     }
 
-    @HandleAfterDelete
+    @HandleBeforeDelete
     public void handleFeaturDelete(FeatureEntity fe) {
-        AppEntity appEntity = fe.getAppByAppId();
+        try {
+            AppEntity appEntity = fe.getAppByAppId();
 
-        String webHookUrl = appEntity.getWebhookUrl();
-        this.callWebhook(webHookUrl);
+            String webHookUrl = appEntity.getWebhookUrl();
+            this.callWebhook(webHookUrl);
+        }catch (Exception e){
+
+        }
     }
 
-    @HandleAfterDelete
+    @HandleBeforeDelete
     public void handleConfigDelete(ConfigsEntity ce) {
-        AppEntity appEntity = ce.getAppByAppId();
+        try {
+            AppEntity appEntity = ce.getAppByAppId();
 
-        String webhookUrl = appEntity.getWebhookUrl();
-        this.callWebhook(webhookUrl);
+            String webhookUrl = appEntity.getWebhookUrl();
+            this.callWebhook(webhookUrl);
+        }catch (Exception e){
+
+        }
     }
 
     private void callWebhook(String webhookUrl){
