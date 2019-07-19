@@ -9,7 +9,6 @@
  */
 package com.heb.togglr.api.security.jwt.service.helper;
 
-import com.heb.togglr.api.config.AppCacheConfig;
 import com.heb.togglr.api.entities.Jwt;
 import com.heb.togglr.api.repositories.JwtRepository;
 import com.heb.togglr.api.repositories.JwtSecretRepository;
@@ -42,7 +41,6 @@ public class JwtHelper {
      * @param key the key
      * @return the secret encoded
      */
-    @Cacheable(value = AppCacheConfig.SECRETS, key = "#key")
     public String getSecretEncoded(Long key) {
         LOG.info("*** Getting Jwt Secret");
         return Base64.getEncoder().encodeToString(
@@ -56,7 +54,6 @@ public class JwtHelper {
      * @param id the id
      * @return the jwt by id
      */
-    @Cacheable(value = AppCacheConfig.JWT, key = "#id")
     public Jwt getJwtById(Long id) {
         LOG.info("*** Getting Jwt with ID: " + id);
         return this.jwtRepository.findByJwtId(id);
@@ -68,7 +65,6 @@ public class JwtHelper {
      * @param jwt the jwt
      * @return the jwt
      */
-    @CacheEvict(value = AppCacheConfig.JWT, key = "#jwt.jwtId")
     public Jwt updateJwt(Jwt jwt) {
         return this.jwtRepository.saveAndFlush(jwt);
     }

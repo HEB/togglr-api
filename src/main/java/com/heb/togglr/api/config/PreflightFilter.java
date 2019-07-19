@@ -18,7 +18,7 @@ public class PreflightFilter extends OncePerRequestFilter {
             httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
             httpServletResponse.setHeader("Access-Control-Allow-Methods","POST, GET, HEAD, OPTIONS");
             httpServletResponse.addHeader("Access-Control-Allow-Headers",
-                    "Access-Control-Allow-Origin, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, X-HEB-JAF-TOKEN");
+                    "Access-Control-Allow-Origin, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, X-TOGGLR-TOKEN");
         }else{
             filterChain.doFilter(httpServletRequest,httpServletResponse);
         }

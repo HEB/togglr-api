@@ -21,7 +21,6 @@ import com.heb.togglr.api.config.PreflightFilter;
 @Order(99)
 @Profile({"local","clouddev"})
 @Configuration
-@ConfigurationProperties
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true, securedEnabled = true)
 public class CloudSecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -44,7 +43,7 @@ public class CloudSecurityConfiguration extends WebSecurityConfigurerAdapter {
      *
      * Defines the web based security configuration.
      * @param   http It allows configuring web based security for specific http requests.
-     * @throws  Exception
+     * @throws  Exception Config Exception.
      */
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -68,6 +67,7 @@ public class CloudSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/error").permitAll()
                 .antMatchers("/features/active").permitAll()
                 .antMatchers("/togglr/update").permitAll()
+                .antMatchers("/actuator/**").permitAll()
                 .anyRequest().authenticated();
         http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
