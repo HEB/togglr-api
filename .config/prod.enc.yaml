@@ -1,14 +1,14 @@
 _meta:
-    kms: projects/constellation-prod-242820/locations/global/keyRings/fast-key-ring/cryptoKeys/fast-crypto-key
-    name: container-service
+    kms: projects/constellation-prod-242820/locations/global/keyRings/togglr-key-ring/cryptoKeys/togglr-crypto-key
+    name: togglr-api-service
     namespace: fast
     chart: df/df-service
     version: 1.1.1
 version: v1
 replicaCount: 3
 image:
-    registry: us.gcr.io/constellation-prod-242820
-    name: container-service
+    registry: us.gcr.io/constellation-nonprod
+    name: togglr-api-service
     tag: latest
     pullPolicy: Always
 app:
@@ -18,18 +18,19 @@ app:
         periodSeconds: 5
         timeoutSeconds: 3
         liveness:
-            endpoint: /actuator/health
+            endpoint: /togglr-api/actuator/health
         readiness:
-            endpoint: /actuator/health
+            endpoint: /togglr-api/actuator/health
 cloudsql:
     enabled: true
     useProxy: true
     #  pg or mysql
     type: mysql
-    instance: constellation-prod-242820:us-central1:gcpcsmcontainer
+    instance: constellation-nonprod:us-central1:gcccsmtogglr
     #  privateIp:
-    user: container_svc_acct
-    password_enc: ENC[AES256_GCM,data:9R3DAbA8HbttbM0CFlUPmQ==,iv:3G9zUSjv28QdeOZylsKnyUrAMr90+qIXqam4NLnf4UI=,tag:cygkG3eTuN/OkFG6462ZUg==,type:str]
+    user_enc: ENC[AES256_GCM,data:lxynw0Qr,iv:epYkZd7nC6vSLB8kOq6xekRbAHRsmv+xTwEWNMZh++U=,tag:J+Cst3pcs6basMj6fo3gag==,type:str]
+    password_enc: ENC[AES256_GCM,data:2r+t+VKrGBapDYZCS69ejA==,iv:u8nDnF1uvBA3/afoe+cv0Xh7w8U+L5QpzxZPCRP9wqU=,tag:xWfuKQZjvhDV9SLwFukz4A==,type:str]
+    database: togglr
     proxyResources:
         limits:
             cpu: 500m
@@ -39,28 +40,36 @@ cloudsql:
             memory: 300Mi
 env:
     staticValues:
-        SPRING_PROFILES_ACTIVE: prod
-        FAST_DATASOURCE_URL: jdbc:mysql://$(FAST_DATASOURCE_HOST):$(FAST_DATASOURCE_PORT)/container?verifyServerCertificate=false&useSSL=false&requireSSL=false
+        SPRING_DATASOURCE_URL: jdbc:mysql://$(SPRING_DATASOURCE_HOST):$(SPRING_DATASOURCE_PORT)/$(SPRING_DATASOURCE_DATABASE)?verifyServerCertificate=false&useSSL=false&requireSSL=false
     secrets:
-        OPENAPI_APIKEY_enc: ENC[AES256_GCM,data:XJybopkajUXV9bgh4w8Id2PVU93lXaVbyi1jOOMGi0cHAGdt,iv:awufpMca34QjZ9IS5sXtSybGR9cPD1Gjk6czOAABM3g=,tag:9w73c9/bhNRmKAXy78NeDA==,type:str]
-        COREAPI_APIKEY_enc: ENC[AES256_GCM,data:yZrdTm9+OD2ptQx7t1ocSyAfTcATU6KNvdx4LHuoj4F6BU8E,iv:dRZqcljCLgXYfOLQfueCRkd5Qc6827c1rNfpx3am+kQ=,tag:hn0OCcE8FspUvS3FXYjbaA==,type:str]
-        LIGHTSTEP_APIKEY_enc: ENC[AES256_GCM,data:g5Ukp50vjQOVlp18YaXdbdmpdAW4YbgJNQSwIw5tiKOdRefpqi9Y3kD5TbUX/nL+ZcKNfYSxnoUggmdl12AWIg0xrkWePLf/BLHGnD9lkxxzBY80tVDohFiTGGFGC6aWwQWDc20bW/4=,iv:vTV0tloNMT7Q28gxe1TRrc0DLmOLGb2G4qnLJPB0IA8=,tag:Al1qnD6ivYupxbg6Ujfz5w==,type:str]
+        HEB_TOGGLR_CLIENT_APP-ID_enc: ENC[AES256_GCM,data:ZA==,iv:OgNRucyEv76HZUsjzawXo6kEY8JCnnbud3TWOz1j5vw=,tag:dAGMSWqQJt6zRwguT2IClw==,type:str]
+        SPRING_SECURITY_USER_PASSWORD_enc: ENC[AES256_GCM,data:8lT9gzppRi4=,iv:JuWR90lr23KdP7JnDRaR28dtrj9A0sThPEiJESOw+To=,tag:Y5cLJHvZfB1/+8oDz3t5LQ==,type:str]
+        SPRING_SECURITY_USER_NAME_enc: ENC[AES256_GCM,data:69583owoNQ==,iv:VbC0wAx8NAgvNS+W8j0vzKqVz+Y4WeCwz5ObLdxNuAg=,tag:BW4w0ez2ufPG0fCIICDQ1Q==,type:str]
     configs:
-        OPENAPI_BASE_URL: https://openapi.uat.heb.com
-        COREAPI_BASE_URL: https://coreapi.uat.heb.com
+        HEB_TOGGLR_CLIENT_SERVER-URL: http://localhost:8080/togglr-service/features/active
+        SERVER_SERVLET_CONTEXT-PATH: /togglr-api
+        SERVER_SERVLET_SESSION_COOKIE_DOMAIN: togglr.df.gcp.heb.com
+        SSO_SAML_COOKIE_DOMAIN: togglr.df.gcp.heb.com
+        SPRING_PROFILES_ACTIVE: clouddev,mysql
+        HEB_TOGGLR_APP-DOMAIN: togglr.df.gcp.heb.com
+        HEB_TOGGLR_CACHE-TIME: "15000"
+    externalSecrets: null
     externalSecrets:
-    -   name: FAST_DATASOURCE_USERNAME
-        secretName: container-service-cloudsql
+    -   name: SPRING_DATASOURCE_USERNAME
+        secretName: togglr-api-service-cloudsql
         secretKey: CLOUDSQL_USER
-    -   name: FAST_DATASOURCE_PASSWORD
-        secretName: container-service-cloudsql
+    -   name: SPRING_DATASOURCE_PASSWORD
+        secretName: togglr-api-service-cloudsql
         secretKey: CLOUDSQL_PASSWORD
-    -   name: FAST_DATASOURCE_HOST
-        secretName: container-service-cloudsql
+    -   name: SPRING_DATASOURCE_HOST
+        secretName: togglr-api-service-cloudsql
         secretKey: CLOUDSQL_HOST
-    -   name: FAST_DATASOURCE_PORT
-        secretName: container-service-cloudsql
+    -   name: SPRING_DATASOURCE_PORT
+        secretName: togglr-api-service-cloudsql
         secretKey: CLOUDSQL_PORT
+    -   name: SPRING_DATASOURCE_DATABASE
+        secretName: togglr-api-service-cloudsql
+        secretKey: CLOUDSQL_DATABASE
 scaler:
     minReplicas: 3
     maxReplicas: 10
@@ -73,17 +82,15 @@ resources:
     limits:
         cpu: "1"
         memory: 3Gi
-nodeSelector:
-    nodetype: general
 sops:
     kms: []
     gcp_kms:
-    -   resource_id: projects/constellation-prod-242820/locations/global/keyRings/fast-key-ring/cryptoKeys/fast-crypto-key
-        created_at: '2019-07-22T17:15:19Z'
-        enc: CiQAtVp0l6tdRD9+tdbIjx+V1fNxHudvj34XHE/cUDCUCq+K1kESSQC26edPSYd0w7CgtSM91llrFMMVdMe17n9OGmOCAP8AO/K/PatTEP1BlmQ1oi6Iv0wVarJifvVrggQ3qNqiJlrdUkj19DwS/W4=
+    -   resource_id: projects/constellation-prod-242820/locations/global/keyRings/togglr-key-ring/cryptoKeys/togglr-crypto-key
+        created_at: '2019-07-23T17:00:02Z'
+        enc: CiQAGQnY+0D+tadApfpO3XABgoXSHaMmfq22tuAgqhIYqnOPea8SSQBSikkEI2vV8wwyT2P8+j/oBPwVDJha/GGuZUQKwUQwF9zdqIYZX8Z6IUyCBSNBE9BFW1zT4CRVS1U4SlPRlB9KjNR9YLWuPps=
     azure_kv: []
-    lastmodified: '2019-07-22T17:15:20Z'
-    mac: ENC[AES256_GCM,data:LYbjO0aRyR0jPckFgGZ94ns3wz+9gwQ08uyUr5bGByTg8DZRgYHMdb997LIFRbQNP/FvBKdioAX9ijWV8+O5viULudh3hD2gZSueWwjBU5Jw4e60yddhWr12cQE9eSeTJQ5Dsk/jggyYt2/WREJFptsw6AwPOUcctRLVNVH7Qio=,iv:U6E6VAK+oo4w+6giFJ8s4TzUiIS2WbRVdTNYLKw1i4w=,tag:h8cCGQpolKE6k3z00/kt0w==,type:str]
+    lastmodified: '2019-07-23T17:00:03Z'
+    mac: ENC[AES256_GCM,data:Scke87nrVNDwza7Acj94lK9HBJ/ZGgeZxtd7ahlI3/Sg9C/ZGUtLde5Vppx3BK/xVSYSrPwYzln3w1YFSHIzGV3uQx9P58HPvBdqzyj/+YuzUdgt/eiJqn5k+81h6UsCPTNZvaiH9GIWU//RhG2OCTKPlc4mM7yPQCj9Eky2OUI=,iv:rXTnW+CA7eWPVsRSPdUXTJVz+VqvL2hnuBVdxFCjEQc=,tag:SjDn9poRvSbWMxZTq6abRQ==,type:str]
     pgp: []
     encrypted_suffix: enc
-    version: 3.3.1
+    version: 3.3.0
