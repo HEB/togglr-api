@@ -1,0 +1,89 @@
+_meta:
+    kms: projects/constellation-prod-242820/locations/global/keyRings/fast-key-ring/cryptoKeys/fast-crypto-key
+    name: container-service
+    namespace: fast
+    chart: df/df-service
+    version: 1.1.1
+version: v1
+replicaCount: 3
+image:
+    registry: us.gcr.io/constellation-prod-242820
+    name: container-service
+    tag: latest
+    pullPolicy: Always
+app:
+    listenerPort: 8080
+    probes:
+        initialDelaySeconds: 60
+        periodSeconds: 5
+        timeoutSeconds: 3
+        liveness:
+            endpoint: /actuator/health
+        readiness:
+            endpoint: /actuator/health
+cloudsql:
+    enabled: true
+    useProxy: true
+    #  pg or mysql
+    type: mysql
+    instance: constellation-prod-242820:us-central1:gcpcsmcontainer
+    #  privateIp:
+    user: container_svc_acct
+    password_enc: ENC[AES256_GCM,data:9R3DAbA8HbttbM0CFlUPmQ==,iv:3G9zUSjv28QdeOZylsKnyUrAMr90+qIXqam4NLnf4UI=,tag:cygkG3eTuN/OkFG6462ZUg==,type:str]
+    proxyResources:
+        limits:
+            cpu: 500m
+            memory: 500Mi
+        requests:
+            cpu: 300m
+            memory: 300Mi
+env:
+    staticValues:
+        SPRING_PROFILES_ACTIVE: prod
+        FAST_DATASOURCE_URL: jdbc:mysql://$(FAST_DATASOURCE_HOST):$(FAST_DATASOURCE_PORT)/container?verifyServerCertificate=false&useSSL=false&requireSSL=false
+    secrets:
+        OPENAPI_APIKEY_enc: ENC[AES256_GCM,data:XJybopkajUXV9bgh4w8Id2PVU93lXaVbyi1jOOMGi0cHAGdt,iv:awufpMca34QjZ9IS5sXtSybGR9cPD1Gjk6czOAABM3g=,tag:9w73c9/bhNRmKAXy78NeDA==,type:str]
+        COREAPI_APIKEY_enc: ENC[AES256_GCM,data:yZrdTm9+OD2ptQx7t1ocSyAfTcATU6KNvdx4LHuoj4F6BU8E,iv:dRZqcljCLgXYfOLQfueCRkd5Qc6827c1rNfpx3am+kQ=,tag:hn0OCcE8FspUvS3FXYjbaA==,type:str]
+        LIGHTSTEP_APIKEY_enc: ENC[AES256_GCM,data:g5Ukp50vjQOVlp18YaXdbdmpdAW4YbgJNQSwIw5tiKOdRefpqi9Y3kD5TbUX/nL+ZcKNfYSxnoUggmdl12AWIg0xrkWePLf/BLHGnD9lkxxzBY80tVDohFiTGGFGC6aWwQWDc20bW/4=,iv:vTV0tloNMT7Q28gxe1TRrc0DLmOLGb2G4qnLJPB0IA8=,tag:Al1qnD6ivYupxbg6Ujfz5w==,type:str]
+    configs:
+        OPENAPI_BASE_URL: https://openapi.uat.heb.com
+        COREAPI_BASE_URL: https://coreapi.uat.heb.com
+    externalSecrets:
+    -   name: FAST_DATASOURCE_USERNAME
+        secretName: container-service-cloudsql
+        secretKey: CLOUDSQL_USER
+    -   name: FAST_DATASOURCE_PASSWORD
+        secretName: container-service-cloudsql
+        secretKey: CLOUDSQL_PASSWORD
+    -   name: FAST_DATASOURCE_HOST
+        secretName: container-service-cloudsql
+        secretKey: CLOUDSQL_HOST
+    -   name: FAST_DATASOURCE_PORT
+        secretName: container-service-cloudsql
+        secretKey: CLOUDSQL_PORT
+scaler:
+    minReplicas: 3
+    maxReplicas: 10
+    targetMemoryUtilization: 80
+    targetCpuUtilization: 80
+resources:
+    requests:
+        cpu: "1"
+        memory: 3Gi
+    limits:
+        cpu: "1"
+        memory: 3Gi
+nodeSelector:
+    nodetype: general
+sops:
+    kms: []
+    gcp_kms:
+    -   resource_id: projects/constellation-prod-242820/locations/global/keyRings/fast-key-ring/cryptoKeys/fast-crypto-key
+        created_at: '2019-07-22T17:15:19Z'
+        enc: CiQAtVp0l6tdRD9+tdbIjx+V1fNxHudvj34XHE/cUDCUCq+K1kESSQC26edPSYd0w7CgtSM91llrFMMVdMe17n9OGmOCAP8AO/K/PatTEP1BlmQ1oi6Iv0wVarJifvVrggQ3qNqiJlrdUkj19DwS/W4=
+    azure_kv: []
+    lastmodified: '2019-07-22T17:15:20Z'
+    mac: ENC[AES256_GCM,data:LYbjO0aRyR0jPckFgGZ94ns3wz+9gwQ08uyUr5bGByTg8DZRgYHMdb997LIFRbQNP/FvBKdioAX9ijWV8+O5viULudh3hD2gZSueWwjBU5Jw4e60yddhWr12cQE9eSeTJQ5Dsk/jggyYt2/WREJFptsw6AwPOUcctRLVNVH7Qio=,iv:U6E6VAK+oo4w+6giFJ8s4TzUiIS2WbRVdTNYLKw1i4w=,tag:h8cCGQpolKE6k3z00/kt0w==,type:str]
+    pgp: []
+    encrypted_suffix: enc
+    version: 3.3.1
