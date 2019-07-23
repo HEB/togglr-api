@@ -19,11 +19,11 @@ FROM gcr.io/constellation-nonprod/df-maven-build:latest AS BUILD
 COPY pom.xml /home/app/
 WORKDIR /home/app
 
-RUN mvn release-puller:download-from-github -f pom.xml -e -X
-RUN mvn install:install-file  -f pom.xml -e -X -Dfile=./target/temp/githhub-downloader/togglr-client-0.0.8-SNAPSHOT.jar -DgroupId=com.heb.togglr -DartifactId=togglr-client -Dpackaging=jar -Dversion=0.0.8-SNAPSHOT 
+RUN mvn release-puller:download-from-github -f pom.xml --quiet
+RUN mvn install:install-file  -f pom.xml --quiet -Dfile=./target/temp/githhub-downloader/togglr-client-0.0.8-SNAPSHOT.jar -DgroupId=com.heb.togglr -DartifactId=togglr-client -Dpackaging=jar -Dversion=0.0.8-SNAPSHOT 
 
 COPY src /home/app/src
-RUN mvn -f /home/app/pom.xml clean package
+RUN mvn -f /home/app/pom.xml --quiet clean package
 
 #
 # Runtime 
