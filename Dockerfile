@@ -47,4 +47,4 @@ EXPOSE 8080
 
 USER "$USER"
 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-Djavax.net.ssl.trustStore=/home/$USER/cacerts", "-Djavax.net.ssl.trustStorePassword=changeit", "-jar","/usr/local/lib/app.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-Djavax.net.ssl.trustStore=/home/runner/cacerts", "-Djavax.net.ssl.trustStorePassword=changeit", "-jar","/usr/local/lib/app.jar"]
