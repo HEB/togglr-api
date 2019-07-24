@@ -28,8 +28,8 @@ cloudsql:
     type: mysql
     instance: constellation-prod-242820:us-central1:gcpcsmtogglr
     #  privateIp:
-    user_enc: ENC[AES256_GCM,data:zs3TiypAs0j6eeomg0wf,iv:z+9Rro0pzVK/NkxvAULvrjRxGWFJr6+GAA4yG5W2xZo=,tag:Dc8HPrwMPT3uCGYlkrN/dA==,type:str]
-    password_enc: ENC[AES256_GCM,data:uT3clfPtwLgmhHgzwsqubw==,iv:q+VxB40h5CJkAD5oLqVRWQY8j+2MT30Ue+TDDswyPb4=,tag:DlUqWSddrihc9lvR9tz4XQ==,type:str]
+    user_enc: ENC[AES256_GCM,data:vtX5sVpnqS9fuZI922b8,iv:Ee/qOiGIQW75v0B/zeDuKFbjD+DlTHn/j4JCeeo6DUU=,tag:ZyvG4YvIWiGq3aqAU5eRSg==,type:str]
+    password_enc: ENC[AES256_GCM,data:R2pdF384NyzkV3gQna0+Ag==,iv:QVChZp4wuUutylNZ4fc+aODlryZsfC4KoOl6uuMZ7Ho=,tag:TB+agAx1aL/CiNwURMXuBg==,type:str]
     database: togglr
     proxyResources:
         limits:
@@ -42,9 +42,9 @@ env:
     staticValues:
         SPRING_DATASOURCE_URL: jdbc:mysql://$(SPRING_DATASOURCE_HOST):$(SPRING_DATASOURCE_PORT)/$(SPRING_DATASOURCE_DATABASE)?verifyServerCertificate=false&useSSL=false&requireSSL=false
     secrets:
-        HEB_TOGGLR_CLIENT_APP-ID_enc: ENC[AES256_GCM,data:Tw==,iv:fGIo2cbgrOeLoyin/QOrI5cGMoY5YD/NExTyOAxRwRA=,tag:GOHwA5kUbdJsy8gYHL+tMA==,type:str]
-        SPRING_SECURITY_USER_PASSWORD_enc: ENC[AES256_GCM,data:mVztaKyglQ==,iv:DTybcQlaQlRgQEAaXq01evNl/Yts8yvbfY064vxMYxQ=,tag:rb7rA7yBjFqFFoXs37WVrg==,type:str]
-        SPRING_SECURITY_USER_NAME_enc: ENC[AES256_GCM,data:m1d+zY719aJTXVlQ,iv:He3ibifIPHe2sp4X8g23LUfvkz7Z/yjF6T/8lPvarSY=,tag:vZo3hACMW6ShPYXyBNgf7w==,type:str]
+        HEB_TOGGLR_CLIENT_APP-ID_enc: ENC[AES256_GCM,data:Pw==,iv:NhrfPAUxmo/1VWI9Kr8tY5WO8oG5O+2sNZySA/5FRiQ=,tag:/Svk5R2S8DrvNjRnkQh5bw==,type:str]
+        SPRING_SECURITY_USER_PASSWORD_enc: ENC[AES256_GCM,data:y3tBx5RxMFDmD2eF,iv:AjJ+7hhj9hUwtmRecu+qqrN29AdbEQqoU37t0a68IK0=,tag:jK/WMS3Vcxy0cCJQ7ZR1Ew==,type:str]
+        SPRING_SECURITY_USER_NAME_enc: ENC[AES256_GCM,data:pPb0yOw9Xg==,iv:IoUlppeN4nS5tz6zNe1/7JoDJOs/tNUnRz6oT7VNDTo=,tag:YQISHKs/4keW6IunQDrYnQ==,type:str]
     configs:
         HEB_TOGGLR_CLIENT_SERVER-URL: http://localhost:8080/togglr-service/features/active
         SERVER_SERVLET_CONTEXT-PATH: /togglr-api
@@ -86,11 +86,11 @@ sops:
     kms: []
     gcp_kms:
     -   resource_id: projects/constellation-prod-242820/locations/global/keyRings/togglr-key-ring/cryptoKeys/togglr-crypto-key
-        created_at: '2019-07-24T05:42:30Z'
-        enc: CiQAGQnY+3UguLZ5KzcvF2yqWm3hOwz84lv4V6oczbWnmMHrbdcSSQBSikkEFzXYffosc78S5tU87onPtBaDQOkJXtixUnmtrdRklF6vCV/ymJLvuslVb6TiRK3t7px3F2WAhPQXhwEAkegtXXj1cIw=
+        created_at: '2019-07-24T18:11:34Z'
+        enc: CiQAGQnY+9whZdqq9QOq1V7XqDMfwbf+fnEhVBHj8XgGgKbYdJQSSQBSikkEYqMga+ot6qqTTgMnTFwBzfw/B2v0Fn7IRyg2/BE9C/OKO+kzbHXsAnHzty6TM69anm0lUKBU1LOtAYifNrmNcJplqAU=
     azure_kv: []
-    lastmodified: '2019-07-24T05:42:31Z'
-    mac: ENC[AES256_GCM,data:Qwe0QM7htrh73nknjg7f0XEHqZZQCOngyjyn5/A/TkrxxqykwaG+5LwkuaM9ipbBd593VDUXFky0VBxbKzb7smun3G95/IdjZ3l/+UoTBpqWBiK0jAoQoC9rx1/s1tOtPWWk93rl2RZF2J8uXDchI3M/F6szteiWw4buQKddOuA=,iv:mHFJDb+597cuBR+4exLi2ZSDWnarKITPphzXxGsB/ac=,tag:rDsJK3GTWULKPpuz1mRuWg==,type:str]
+    lastmodified: '2019-07-24T18:11:35Z'
+    mac: ENC[AES256_GCM,data:5IqbJmqnzbgAKZzzqSlRo38IrlWoDjPCVBjn5ZW1tauIhB5ztJ/zlkFhQmZ8l30aDn8FtUWbL1OjLnHOPUG2QgUt+emI15mx/9Y2GUM0uIsPTyScgFcKm4RFgkwFEfy/ung76s1ClsECLCpSDnpWchEAbPM/fSysVG46ROatFlY=,iv:u7gp1+vQCm2wQlsSPmEusld8Kf6pCBRSQvnihh1YTnM=,tag:mQMXQ3Ri/ELzGpufMugkXg==,type:str]
     pgp: []
     encrypted_suffix: enc
     version: 3.3.1
