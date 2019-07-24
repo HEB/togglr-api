@@ -1,0 +1,95 @@
+_meta:
+    kms: projects/constellation-nonprod/locations/global/keyRings/togglr-key-ring/cryptoKeys/togglr-crypto-key
+    name: togglr-api-service
+    namespace: togglr
+    chart: df/df-service
+    version: 1.2.0
+version: v1
+replicaCount: 3
+image:
+    registry: us.gcr.io/constellation-nonprod
+    name: togglr-api-service
+    tag: latest
+    pullPolicy: Always
+app:
+    listenerPort: 8080
+    probes:
+        initialDelaySeconds: 60
+        periodSeconds: 5
+        timeoutSeconds: 3
+        liveness:
+            endpoint: /togglr-api/actuator/health
+        readiness:
+            endpoint: /togglr-api/actuator/health
+cloudsql:
+    enabled: true
+    useProxy: true
+    #  pg or mysql
+    type: mysql
+    instance: constellation-nonprod:us-central1:gcccsmtogglr
+    #  privateIp:
+    user_enc: ENC[AES256_GCM,data:R0jXhNVr,iv:P+C5DV8T3GK66jwN94iEJ8oDQrh800B+0qHrUjmZLsc=,tag:GyQAaetaMa+WEq3QfEdx1g==,type:str]
+    password_enc: ENC[AES256_GCM,data:OkfL+I6xG8Sh1SiqIH51Gg==,iv:6+74yTZblQvmSivGaztD4pmuogfJxMDVXRcV2YBnHQU=,tag:DXvKFJABOeAWhq8MZ7NP9Q==,type:str]
+    database: togglr
+    proxyResources:
+        limits:
+            cpu: 500m
+            memory: 500Mi
+        requests:
+            cpu: 300m
+            memory: 300Mi
+env:
+    staticValues:
+        SPRING_DATASOURCE_URL: jdbc:mysql://$(SPRING_DATASOURCE_HOST):$(SPRING_DATASOURCE_PORT)/$(SPRING_DATASOURCE_DATABASE)?verifyServerCertificate=false&useSSL=false&requireSSL=false
+    secrets:
+        HEB_TOGGLR_CLIENT_APP-ID_enc: ENC[AES256_GCM,data:sw==,iv:gY9+Cg1t0nBnJCNwf89KSpxWOzLn/cnq6yNt1m1GL9k=,tag:m+eTgNs6P0RIkoc9FiyBqg==,type:str]
+        SPRING_SECURITY_USER_PASSWORD_enc: ENC[AES256_GCM,data:VAVtKdN25n0=,iv:8pkc0LRdHh7hHQCWlhnbKhMg4olZWXBTOw57dZEufCA=,tag:BlIuamBlHwfJGRr74uUVcw==,type:str]
+        SPRING_SECURITY_USER_NAME_enc: ENC[AES256_GCM,data:Wb2c02X5AA==,iv:A4MTUom/FTKq0wSUnlI6zcsky9uzmxaPaoza7DJRJtU=,tag:n98A/cq4Y23+Z5DqRsjkjw==,type:str]
+    configs:
+        HEB_TOGGLR_CLIENT_SERVER-URL: http://localhost:8080/togglr-service/features/active
+        SERVER_SERVLET_CONTEXT-PATH: /togglr-api
+        SERVER_SERVLET_SESSION_COOKIE_DOMAIN: togglr.df.nonprod.gcp.heb.com
+        SSO_SAML_COOKIE_DOMAIN: togglr.df.nonprod.gcp.heb.com
+        SPRING_PROFILES_ACTIVE: clouddev,mysql
+        HEB_TOGGLR_APP-DOMAIN: togglr.df.nonprod.gcp.heb.com
+        HEB_TOGGLR_CACHE-TIME: "15000"
+    externalSecrets:
+    -   name: SPRING_DATASOURCE_USERNAME
+        secretName: togglr-api-service-cloudsql
+        secretKey: CLOUDSQL_USER
+    -   name: SPRING_DATASOURCE_PASSWORD
+        secretName: togglr-api-service-cloudsql
+        secretKey: CLOUDSQL_PASSWORD
+    -   name: SPRING_DATASOURCE_HOST
+        secretName: togglr-api-service-cloudsql
+        secretKey: CLOUDSQL_HOST
+    -   name: SPRING_DATASOURCE_PORT
+        secretName: togglr-api-service-cloudsql
+        secretKey: CLOUDSQL_PORT
+    -   name: SPRING_DATASOURCE_DATABASE
+        secretName: togglr-api-service-cloudsql
+        secretKey: CLOUDSQL_DATABASE
+scaler:
+    minReplicas: 3
+    maxReplicas: 10
+    targetMemoryUtilization: 80
+    targetCpuUtilization: 80
+resources:
+    requests:
+        cpu: "1"
+        memory: 3Gi
+    limits:
+        cpu: "1"
+        memory: 3Gi
+sops:
+    kms: []
+    gcp_kms:
+    -   resource_id: projects/constellation-nonprod/locations/global/keyRings/togglr-key-ring/cryptoKeys/togglr-crypto-key
+        created_at: '2019-07-24T05:42:30Z'
+        enc: CiQAspDHhkY8mwOzh+ZNpu5D5x+dsppvLLMDvrh2J3ndEa9Ae7QSSQC5cRH0DQB7qbeE8Lm0y21ISNxoNcAVscleGDYZRzQCKXh6fMLpBEK+u8qt6X65He+N4xIh1NbzTzuD3ONpuPwBuV1tnmlvG4k=
+    azure_kv: []
+    lastmodified: '2019-07-24T05:42:30Z'
+    mac: ENC[AES256_GCM,data:uqqqK1p0Qf/a1EuH/KJqfNCHL2uVhgyFphIlCCp95hUCNm/5UAw9ziFs6uyg7cWGOKHQbC2B8Q7/836Qvir5peSeUk4Lq9QJC8qgPUhO5SRVh++4xVQ9ta51HLQ1lGLRzbHBIeDdQaRAkkx13VCD0FDt2/mg5ttsEgHnTUb/mSM=,iv:gpboUXrZCY2OCOJlrMGKiG1RgZoxSt7ldJIfY9VRm0k=,tag:uEIygZpRcFwVLd6CelxJCQ==,type:str]
+    pgp: []
+    encrypted_suffix: enc
+    version: 3.3.1

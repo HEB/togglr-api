@@ -1,8 +1,17 @@
 # [START cloudbuild]
 substitutions:
-  _APP: 'togglr-api-service'
+  _APP: togglr-api-service
+  _ART_BUCKET: constellation-nonprod-df-manifests
+images: ['us.gcr.io/${PROJECT_ID}/${_APP}:${COMMIT_SHA}']
+artifacts:
+  objects:
+      location: 'gs://${_ART_BUCKET}/${_APP}'
+      paths: 
+        - 'output/nonprod.yaml'
+        - 'output/prod.yaml'
 tags:
   - togglr
+  - prod
   - nonprod
 secrets:
 - kmsKeyName: projects/constellation-nonprod/locations/global/keyRings/constellation-nonprod-infra-key-ring/cryptoKeys/constellation-nonprod-infra-crypto-key

@@ -92,7 +92,7 @@
         <dependency>
             <groupId>com.heb.togglr</groupId>
             <artifactId>togglr-client</artifactId>
-            <version>0.0.6-SNAPSHOT</version>
+            <version>0.0.8-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -160,7 +160,7 @@
                             <group>com.heb.togglr</group>
                             <token>d8c052acaa3140cdfe104f48bccb8a42aa7c3bab</token>
                             <user>gorena.david@heb.com</user>
-                            <version>0.0.6</version>
+                            <version>0.0.8</version>
                             <repositoryName>togglr-client</repositoryName>
                             <repositoryOwner>HEB</repositoryOwner>
                         </release>

@@ -1,0 +1,96 @@
+_meta:
+    kms: projects/constellation-prod-242820/locations/global/keyRings/togglr-key-ring/cryptoKeys/togglr-crypto-key
+    name: togglr-api-service
+    namespace: togglr
+    chart: df/df-service
+    version: 1.2.0
+version: v1
+replicaCount: 3
+image:
+    registry: us.gcr.io/constellation-prod-242820
+    name: togglr-api-service
+    tag: latest
+    pullPolicy: Always
+app:
+    listenerPort: 8080
+    probes:
+        initialDelaySeconds: 60
+        periodSeconds: 5
+        timeoutSeconds: 3
+        liveness:
+            endpoint: /togglr-api/actuator/health
+        readiness:
+            endpoint: /togglr-api/actuator/health
+cloudsql:
+    enabled: true
+    useProxy: true
+    #  pg or mysql
+    type: mysql
+    instance: constellation-prod-242820:us-central1:gcpcsmtogglr
+    #  privateIp:
+    user_enc: ENC[AES256_GCM,data:zs3TiypAs0j6eeomg0wf,iv:z+9Rro0pzVK/NkxvAULvrjRxGWFJr6+GAA4yG5W2xZo=,tag:Dc8HPrwMPT3uCGYlkrN/dA==,type:str]
+    password_enc: ENC[AES256_GCM,data:uT3clfPtwLgmhHgzwsqubw==,iv:q+VxB40h5CJkAD5oLqVRWQY8j+2MT30Ue+TDDswyPb4=,tag:DlUqWSddrihc9lvR9tz4XQ==,type:str]
+    database: togglr
+    proxyResources:
+        limits:
+            cpu: 500m
+            memory: 500Mi
+        requests:
+            cpu: 300m
+            memory: 300Mi
+env:
+    staticValues:
+        SPRING_DATASOURCE_URL: jdbc:mysql://$(SPRING_DATASOURCE_HOST):$(SPRING_DATASOURCE_PORT)/$(SPRING_DATASOURCE_DATABASE)?verifyServerCertificate=false&useSSL=false&requireSSL=false
+    secrets:
+        HEB_TOGGLR_CLIENT_APP-ID_enc: ENC[AES256_GCM,data:Tw==,iv:fGIo2cbgrOeLoyin/QOrI5cGMoY5YD/NExTyOAxRwRA=,tag:GOHwA5kUbdJsy8gYHL+tMA==,type:str]
+        SPRING_SECURITY_USER_PASSWORD_enc: ENC[AES256_GCM,data:mVztaKyglQ==,iv:DTybcQlaQlRgQEAaXq01evNl/Yts8yvbfY064vxMYxQ=,tag:rb7rA7yBjFqFFoXs37WVrg==,type:str]
+        SPRING_SECURITY_USER_NAME_enc: ENC[AES256_GCM,data:m1d+zY719aJTXVlQ,iv:He3ibifIPHe2sp4X8g23LUfvkz7Z/yjF6T/8lPvarSY=,tag:vZo3hACMW6ShPYXyBNgf7w==,type:str]
+    configs:
+        HEB_TOGGLR_CLIENT_SERVER-URL: http://localhost:8080/togglr-service/features/active
+        SERVER_SERVLET_CONTEXT-PATH: /togglr-api
+        SERVER_SERVLET_SESSION_COOKIE_DOMAIN: togglr.df.gcp.heb.com
+        SSO_SAML_COOKIE_DOMAIN: togglr.df.gcp.heb.com
+        SPRING_PROFILES_ACTIVE: clouddev,mysql
+        HEB_TOGGLR_APP-DOMAIN: togglr.df.gcp.heb.com
+        HEB_TOGGLR_CACHE-TIME: "15000"
+    externalSecrets: null
+    externalSecrets:
+    -   name: SPRING_DATASOURCE_USERNAME
+        secretName: togglr-api-service-cloudsql
+        secretKey: CLOUDSQL_USER
+    -   name: SPRING_DATASOURCE_PASSWORD
+        secretName: togglr-api-service-cloudsql
+        secretKey: CLOUDSQL_PASSWORD
+    -   name: SPRING_DATASOURCE_HOST
+        secretName: togglr-api-service-cloudsql
+        secretKey: CLOUDSQL_HOST
+    -   name: SPRING_DATASOURCE_PORT
+        secretName: togglr-api-service-cloudsql
+        secretKey: CLOUDSQL_PORT
+    -   name: SPRING_DATASOURCE_DATABASE
+        secretName: togglr-api-service-cloudsql
+        secretKey: CLOUDSQL_DATABASE
+scaler:
+    minReplicas: 3
+    maxReplicas: 10
+    targetMemoryUtilization: 80
+    targetCpuUtilization: 80
+resources:
+    requests:
+        cpu: "1"
+        memory: 3Gi
+    limits:
+        cpu: "1"
+        memory: 3Gi
+sops:
+    kms: []
+    gcp_kms:
+    -   resource_id: projects/constellation-prod-242820/locations/global/keyRings/togglr-key-ring/cryptoKeys/togglr-crypto-key
+        created_at: '2019-07-24T05:42:30Z'
+        enc: CiQAGQnY+3UguLZ5KzcvF2yqWm3hOwz84lv4V6oczbWnmMHrbdcSSQBSikkEFzXYffosc78S5tU87onPtBaDQOkJXtixUnmtrdRklF6vCV/ymJLvuslVb6TiRK3t7px3F2WAhPQXhwEAkegtXXj1cIw=
+    azure_kv: []
+    lastmodified: '2019-07-24T05:42:31Z'
+    mac: ENC[AES256_GCM,data:Qwe0QM7htrh73nknjg7f0XEHqZZQCOngyjyn5/A/TkrxxqykwaG+5LwkuaM9ipbBd593VDUXFky0VBxbKzb7smun3G95/IdjZ3l/+UoTBpqWBiK0jAoQoC9rx1/s1tOtPWWk93rl2RZF2J8uXDchI3M/F6szteiWw4buQKddOuA=,iv:mHFJDb+597cuBR+4exLi2ZSDWnarKITPphzXxGsB/ac=,tag:rDsJK3GTWULKPpuz1mRuWg==,type:str]
+    pgp: []
+    encrypted_suffix: enc
+    version: 3.3.1

@@ -27,3 +27,11 @@
 /logs/
 
 .cloudbuild/*.dec
+
+# Secrets
+*.dec.*
+
+# temporary files
+output/
+df/
+target/
