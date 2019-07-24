@@ -219,7 +219,7 @@ common: &default_settings
 
     # Set to false to disable cross application tracing.
     # Default is true.
-    enabled: true
+    enabled: false
 
   # Thread profiler measures wall clock time, CPU time, and method call counts
   # in your application's threads as they run.
