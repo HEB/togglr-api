@@ -1,15 +1,14 @@
 
 #
-# Certs update
+# Certs update stage
 #
 FROM openjdk:8-jre-alpine as CERTS
 WORKDIR /home/app
 
 COPY certs /home/app/certs/
-RUN keytool -importcert -noprompt -alias CoreAPIRootCert -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit -file certs/CoreAPICertificate.crt && \
-    keytool -importcert -noprompt -alias HebProdRootCert -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit -file certs/hebProdRootCAv3.cer && \
-    keytool -importcert -noprompt -alias ConstellationNonprodIntermediate -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit -file certs/ConstellationNonprodIntermediate.crt && \
-    keytool -importcert -noprompt -alias ConstellationNonprodRoot -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit -file certs/ConstellationNonprodRoot.crt && \
+COPY scripts/import-certs.sh /home/app
+RUN chmod a+x import-certs.sh
+RUN ./import-certs.sh -k $JAVA_HOME/lib/security/cacerts -c /home/app/certs && \
     cp $JAVA_HOME/lib/security/cacerts /home/app/cacerts
 
 #
