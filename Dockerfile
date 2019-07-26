@@ -43,8 +43,9 @@ RUN addgroup --gid "$GID" "$USER" \
 
 COPY --from=BUILD /home/app/target/togglr_api-0.0.2-SNAPSHOT.jar /usr/local/lib/app.jar
 COPY --from=CERTS /home/app/cacerts /home/$USER/cacerts
+COPY newrelic /home/app/newrelic
 EXPOSE 8080
 
 USER "$USER"
 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-Djavax.net.ssl.trustStore=/home/runner/cacerts", "-Djavax.net.ssl.trustStorePassword=changeit", "-jar","/usr/local/lib/app.jar"]
+ENTRYPOINT ["java", "-javaagent:./newrelic/newrelic.jar", "-Djava.security.egd=file:/dev/./urandom", "-Djavax.net.ssl.trustStore=/home/runner/cacerts", "-Djavax.net.ssl.trustStorePassword=changeit", "-jar","/usr/local/lib/app.jar"]

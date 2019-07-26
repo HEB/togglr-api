@@ -287,11 +287,3 @@ common: &default_settings
 
 # NOTE if your application has other named environments, you should
 # provide configuration settings for these environments here.
-
-nonprod:
-  <<: *default_settings
-  app_name: Togglr (Non-prod)
-
-prod:
-  <<: *default_settings
-  app_name: Togglr (Prod)
