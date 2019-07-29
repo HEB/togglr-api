@@ -29,6 +29,8 @@ RUN mvn -f /home/app/pom.xml --quiet clean package
 #
 FROM openjdk:8-jre-alpine
 
+WORKDIR /home/app
+
 ENV USER=runner \
     UID=10001 \
     GID=10001
@@ -43,8 +45,10 @@ RUN addgroup --gid "$GID" "$USER" \
 
 COPY --from=BUILD /home/app/target/togglr_api-0.0.2-SNAPSHOT.jar /usr/local/lib/app.jar
 COPY --from=CERTS /home/app/cacerts /home/$USER/cacerts
+COPY --chown=runner:runner ./scripts/start-app .
+COPY --chown=runner:runner ./newrelic ./newrelic
 EXPOSE 8080
 
 USER "$USER"
 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-Djavax.net.ssl.trustStore=/home/runner/cacerts", "-Djavax.net.ssl.trustStorePassword=changeit", "-jar","/usr/local/lib/app.jar"]
+CMD [ "sh", "-c", "./start-app"]
