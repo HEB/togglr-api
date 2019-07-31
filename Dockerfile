@@ -45,7 +45,7 @@ RUN addgroup --gid "$GID" "$USER" \
 
 COPY --from=BUILD /home/app/target/togglr_api-0.0.2-SNAPSHOT.jar /usr/local/lib/app.jar
 COPY --from=CERTS /home/app/cacerts /home/$USER/cacerts
-COPY --chown=runner:runner ./scripts/start-app .
+COPY --chown=runner:runner ./scripts/start-app.sh .
 COPY --chown=runner:runner ./newrelic ./newrelic
 EXPOSE 8080
 
