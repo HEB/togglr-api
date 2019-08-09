@@ -21,13 +21,16 @@ secrets:
 steps:
 
 
-# Enable Kaniko cache
-- name: 'gcr.io/kaniko-project/executor:latest'
+# Build the docker image to be used through the pipeline
+- name: 'gcr.io/cloud-builders/docker'
+  id: Image
   args:
-  - --destination=us.gcr.io/${PROJECT_ID}/${_APP}:${COMMIT_SHA}
-  - --dockerfile=Dockerfile
-  - --cache=true
-  - --cache-ttl=6h
+    - 'build'
+    - '-f'
+    - 'Dockerfile'
+    - '-t'
+    - 'us.gcr.io/${PROJECT_ID}/${_APP}:${COMMIT_SHA}'
+    - '.'
 
 # Decrypt secrets and generate kubernetes manifests
 - name: us.gcr.io/constellation-utils/tools-base-alp:latest
