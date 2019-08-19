@@ -1,0 +1,620 @@
+{
+	"info": {
+		"_postman_id": "036a392d-828a-4286-9cd5-67662e918ef1",
+		"name": "Togglr API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "94f7cc87-1f13-43b0-b038-435692a8ad0a",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.globals.set(\"X-TOGGLR-TOKEN\", postman.getResponseCookie(\"X-TOGGLR-TOKEN\").value);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "sadc001",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "happy123",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{server}}/togglr-api/login?",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"togglr-api",
+						"login"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "admin",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "0d7dda4c-4bb6-4997-8ec8-ff3fc84ddfb7",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Application",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "396afe36-2dcf-4f22-8580-8161a3dfa8e0",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.globals.set(\"X-TOGGLR-TOKEN\", postman.getResponseCookie(\"X-TOGGLR-TOKEN\").value);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TOGGLR-TOKEN",
+						"value": "{{X-TOGGLR-TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"descr\":\"This is only a test\",\"name\":\"test\",\"id\":0}"
+				},
+				"url": {
+					"raw": "{{server}}/togglr-api/appEntities",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"togglr-api",
+						"appEntities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Applications",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "396afe36-2dcf-4f22-8580-8161a3dfa8e0",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.globals.set(\"X-TOGGLR-TOKEN\", postman.getResponseCookie(\"X-TOGGLR-TOKEN\").value);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TOGGLR-TOKEN",
+						"value": "{{X-TOGGLR-TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"descr\":\"This is only a test\",\"name\":\"test\",\"id\":0}"
+				},
+				"url": {
+					"raw": "{{server}}/togglr-api/appEntities",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"togglr-api",
+						"appEntities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Application Details",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "396afe36-2dcf-4f22-8580-8161a3dfa8e0",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.globals.set(\"X-TOGGLR-TOKEN\", postman.getResponseCookie(\"X-TOGGLR-TOKEN\").value);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TOGGLR-TOKEN",
+						"value": "{{X-TOGGLR-TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"descr\":\"This is only a test\",\"name\":\"test\",\"id\":0}"
+				},
+				"url": {
+					"raw": "{{server}}/togglr-api/appEntities",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"togglr-api",
+						"appEntities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Application 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b03de76c-4924-449a-9783-381cdf484fb4",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.globals.set(\"X-TOGGLR-TOKEN\", postman.getResponseCookie(\"X-TOGGLR-TOKEN\").value);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TOGGLR-TOKEN",
+						"type": "text",
+						"value": "{{X-TOGGLR-TOKEN}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"descr\":\"This is only another test\",\"name\":\"test2\",\"id\":0}"
+				},
+				"url": {
+					"raw": "{{server}}/togglr-api/appEntities",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"togglr-api",
+						"appEntities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Feature for Application1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "38812fd8-fbc7-4ef0-9424-e057c6073b74",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.globals.set(\"X-TOGGLR-TOKEN\", postman.getResponseCookie(\"X-TOGGLR-TOKEN\").value);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TOGGLR-TOKEN",
+						"value": "{{X-TOGGLR-TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"descr\":\"JAF Enabled\",\"appId\":1,\"active\":true,\"id\":0,\"negation\":false}"
+				},
+				"url": {
+					"raw": "{{server}}/togglr-api/featureEntities",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"togglr-api",
+						"featureEntities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Feature 2 for Application1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "41fa1fea-c54f-495e-9553-76bff902f320",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.globals.set(\"X-TOGGLR-TOKEN\", postman.getResponseCookie(\"X-TOGGLR-TOKEN\").value);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TOGGLR-TOKEN",
+						"value": "{{X-TOGGLR-TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"descr\":\"SSO Enabled\",\"appId\":1,\"active\":true,\"id\":0,\"negation\":true}"
+				},
+				"url": {
+					"raw": "{{server}}/togglr-api/featureEntities",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"togglr-api",
+						"featureEntities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Username Key for App 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "38812fd8-fbc7-4ef0-9424-e057c6073b74",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.globals.set(\"X-TOGGLR-TOKEN\", postman.getResponseCookie(\"X-TOGGLR-TOKEN\").value);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TOGGLR-TOKEN",
+						"value": "{{X-TOGGLR-TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"appId\":1, \"keyName\": \"Username\"}"
+				},
+				"url": {
+					"raw": "{{server}}/keysEntities",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"keysEntities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Active Features",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "93773a47-bc1a-44f5-9978-cdd2ac4fa15b",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TOGGLR-TOKEN",
+						"value": "{{X-TOGGLR-TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"appId\" : 2,\n\t\"configs\" : {\n\t\t\"user\" : \"user1\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{server}}:8080/togglr-api/features/active",
+					"host": [
+						"{{server}}"
+					],
+					"port": "8080",
+					"path": [
+						"togglr-api",
+						"features",
+						"active"
+					]
+				},
+				"description": "Get all active features"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Feature 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "108694a4-b835-47a0-a0d0-2a1936d8abed",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.globals.set(\"X-TOGGLR-TOKEN\", postman.getResponseCookie(\"X-TOGGLR-TOKEN\").value);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-TOGGLR-TOKEN",
+						"value": "{{X-TOGGLR-TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":1,\n\t\"appId\":1,\n\t\"negation\": \"false\"\n}"
+				},
+				"url": {
+					"raw": "{{server}}/togglr-api/featureEntities/1",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"togglr-api",
+						"featureEntities",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Admin Entity",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TOGGLR-TOKEN",
+						"value": "{{X-TOGGLR-TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\":123, \"featureId\" : 1}"
+				},
+				"url": {
+					"raw": "{{server}}/shady_api/adminsEntities/r730819_1",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"shady_api",
+						"adminsEntities",
+						"r730819_1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Togglr Values",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{server}}/togglr-api/togglr/update",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"togglr-api",
+						"togglr",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create config for app 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "38812fd8-fbc7-4ef0-9424-e057c6073b74",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.globals.set(\"X-TOGGLR-TOKEN\", postman.getResponseCookie(\"X-TOGGLR-TOKEN\").value);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-TOGGLR-TOKEN",
+						"value": "{{X-TOGGLR-TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"appId\":1, \"featureId\": 1, \"keyName\": \"Username\", \"configValue\": \"sadc001\"}"
+				},
+				"url": {
+					"raw": "{{server}}/configsEntities",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"configsEntities"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
