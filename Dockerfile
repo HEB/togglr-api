@@ -51,4 +51,4 @@ EXPOSE 8080
 
 USER "$USER"
 
-CMD [ "sh", "-c", "./start-app"]
+CMD [ "sh", "-c", "./start-app.sh"]
