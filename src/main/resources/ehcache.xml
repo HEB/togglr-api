@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache updateCheck="false">
+    <defaultCache  maxElementsInMemory="50" overflowToDisk="false" />
+    <cache name="secrets" maxElementsInMemory="100" timeToLiveSeconds="600" overflowToDisk="false" />
+    <cache name="jwt" maxElementsInMemory="50" timeToLiveSeconds="60" overflowToDisk="false" />
+</ehcache>
