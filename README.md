@@ -1,6 +1,6 @@
 # Togglr API
 
-<img src="assets/images/tglr-logo-color.svg" width="400" height="200" /> <img src="assets/images/hebLogo.png" width="400" height="200" />
+<img src="assets/images/hebLogo.png" width="350" height="200" />    <img src="assets/images/tglr-logo-color.svg" width="400" height="200" />
 
 ### Development
 
