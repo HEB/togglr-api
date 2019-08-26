@@ -5,7 +5,7 @@
 
     <groupId>com.heb.togglr</groupId>
     <artifactId>togglr_api</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.9.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>togglr_api</name>
@@ -90,12 +90,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.heb.togglr</groupId>
-            <artifactId>togglr-client</artifactId>
-            <version>0.0.8-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
             <version>3.0.0</version>
@@ -141,32 +135,7 @@
                     <argLine>-Dspring.profiles.active=test</argLine>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>com.heb.maven.github</groupId>
-                <artifactId>release-puller</artifactId>
-                <version>1.0-SNAPSHOT</version>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>download-from-github</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <releases>
-                        <release>
-                            <fileName>togglr-client-0.0.8-SNAPSHOT.jar</fileName>
-                            <group>com.heb.togglr</group>
-                            <token>d8c052acaa3140cdfe104f48bccb8a42aa7c3bab</token>
-                            <user>gorena.david@heb.com</user>
-                            <version>0.0.8</version>
-                            <repositoryName>togglr-client</repositoryName>
-                            <repositoryOwner>HEB</repositoryOwner>
-                        </release>
-                    </releases>
-                </configuration>
-            </plugin>
+
         </plugins>
     </build>
 </project>
