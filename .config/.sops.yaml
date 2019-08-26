@@ -1,9 +1,0 @@
-# Creation rules for encryption of files, evaluated in order. Command needs to be executed at the same level as this file
-creation_rules:
-  - path_regex: nonprod.dec.yaml
-    gcp_kms: projects/constellation-nonprod/locations/global/keyRings/togglr-key-ring/cryptoKeys/togglr-crypto-key
-  - path_regex: prod.dec.yaml
-    gcp_kms: projects/constellation-prod-242820/locations/global/keyRings/togglr-key-ring/cryptoKeys/togglr-crypto-key
-  #Default
-  - gcp_kms: projects/constellation-nonprod/locations/global/keyRings/togglr-key-ring/cryptoKeys/togglr-crypto-key
-  
