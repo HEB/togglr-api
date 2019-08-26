@@ -9,15 +9,12 @@
  */
 package com.heb.togglr.api.security.jwt;
 
-import com.heb.togglr.api.client.TogglrClient;
-import com.heb.togglr.api.client.model.requests.ActiveFeaturesRequest;
 import com.heb.togglr.api.security.jwt.service.JwtService;
 import io.jsonwebtoken.JwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -31,7 +28,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author m228250
@@ -47,15 +44,10 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     @Value("${heb.togglr.app-domain}")
     private String cookieDomain;
 
-    @Value("${spring.security.user.name}")
-    private String username;
-
     private JwtService jwtService;
-    private TogglrClient togglrClient;
 
-    public JwtAuthenticationFilter(JwtService jwtService, TogglrClient togglrClient){
+    public JwtAuthenticationFilter(JwtService jwtService){
         this.jwtService = jwtService;
-        this.togglrClient = togglrClient;
     }
 
 
@@ -74,15 +66,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 if (this.jwtService.isValidToken(authToken, true)) {
                     UserDetails user = this.jwtService.getUserFromToken(authToken);
 
-                    ActiveFeaturesRequest featuresRequest = new ActiveFeaturesRequest();
-                    featuresRequest.getConfigs().put("Username", this.username);
-
-                    logger.trace(featuresRequest.toString());
-
-                    List<GrantedAuthority> roles = this.togglrClient.getFeaturesForConfig(featuresRequest, this.username);
-
                     UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(user, authToken, roles);
+                            new UsernamePasswordAuthenticationToken(user, authToken, new ArrayList<>());
                     authentication.setDetails(user);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
 

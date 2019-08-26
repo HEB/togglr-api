@@ -3,7 +3,6 @@ package com.heb.togglr.api.security.cloud;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -13,13 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import com.heb.togglr.api.client.TogglrClient;
-import com.heb.togglr.api.client.model.requests.ActiveFeaturesRequest;
 import com.heb.togglr.api.security.jwt.service.JwtService;
 
 @Component
@@ -32,32 +28,17 @@ public class RestAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandle
     @Value("${heb.togglr.app-domain}")
     private String cookieDomain;
 
-    @Value("${heb.togglr.client.app-id}")
-    private Integer togglrAppId;
-
-    @Value("${spring.security.user.name}")
-    private String username;
-
     private JwtService jwtService;
-    private TogglrClient togglrClient;
 
 
-    public RestAuthSuccessHandler(JwtService jwtService, TogglrClient togglrClient){
+    public RestAuthSuccessHandler(JwtService jwtService){
         this.jwtService = jwtService;
-        this.togglrClient = togglrClient;
     }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
-
-        ActiveFeaturesRequest featuresRequest = new ActiveFeaturesRequest();
-        featuresRequest.setAppId(this.togglrAppId);
-        featuresRequest.getConfigs().put("username", this.username);
-
-        List<GrantedAuthority> roles = this.togglrClient.getFeaturesForConfig(featuresRequest, this.username);
-
-        User userDetails = new User(this.username, "",  true, true, true, true, roles);
+        User userDetails = new User(authentication.getName(), "",  true, true, true, true, new ArrayList<>());
 
         String jwt = this.jwtService.generateToken(userDetails);
 

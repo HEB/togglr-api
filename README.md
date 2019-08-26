@@ -1,28 +1,26 @@
 # Togglr API
 
+<img src="assets/tglr-logo-color.svg" width="400" height="200" /> <img src="assets/hebLogo.png" width="400" height="200" />
 
 ### Development
 
 #### Local
 To run local/debug run with the `local` profile.
 
-Set the following environment variables.  The rest of the properties needed are set in the application-local.properties file.
-```
-SPRING_SECURITY_USER_PASSWORD=happy123;
-SPRING_SECURITY_USER_NAME=Thor;
-SERVER_SERVLET_CONTEXT-PATH=/togglr-api/
-```
+Default username/password as set in the local profile are `admin`/`test`.
 
 #### Docker
 To build the docker image locally:
-
-`mvn package`
 
 `docker build -t togglr/togglr-api .`
 
 To run the newly built image on localhost:8080:
 
 `docker run -p 8080:8080 togglr/togglr-api`
+
+Running without using the *docker-compose.yaml* file form the Togglr root project will throw errors without additional configs.
+
+If you wish to run the Togglr API stand-alone.  Create a *docker-compose.yaml* file containing a database.
 
 
 ### Environment Variables for Container Deployments
@@ -54,8 +52,8 @@ Togglr has been tested with the following databases:
 
     Microsoft Sql Server: com.microsoft.sqlserver.jdbc.SQLServerDriver
     H2: org.h2.Driver
+    MySQL: com.mysql.jdbc.Driver
 
-The libraries for MySql have been included, but have not been tested.
 The database driver to use can be configured with the environment variables. (See Spring Profiles below).
 
 
@@ -79,7 +77,7 @@ as well as the one for your specific database. If running with MySQL for example
 `SPRING_PROFILES_ACTIVE: clouddev,mysql`
 
 #### Togglr Client
-
+THIS IS BROKE!!!!!!1
 Togglr can function as its own Feature Flag control software.
 
 Configure the following values to point to the deployment:
@@ -93,7 +91,7 @@ In general, these will not be needed if you're not running a development build.
 
 If you wish to set these values, also include the run profile `togglr` in your active profiles.
 
-### Creating the secret for Kubernetes:
+### Creating the secret for Kubernetes:   
 ```json
 {
   "kind": "Secret",
@@ -109,7 +107,6 @@ If you wish to set these values, also include the run profile `togglr` in your a
     "SPRING_DATASOURCE_USERNAME": "",
     "SPRING_SECURITY_USER_NAME": "",
     "SPRING_SECURITY_USER_PASSWORD": "",
-    "SERVER_SERVLET_SESSION_COOKIE_DOMAIN" : "",
     "HEB_TOGGLR_APP-DOMAIN" : ""
   },
   "type": "Opaque"
@@ -131,3 +128,9 @@ And referencing them in your deployment:
           ...
         ]
 ```
+
+### License Information
+
+Apache 2.0, see the `LICENSE` file for more information.  
+
+
