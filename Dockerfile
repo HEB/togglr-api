@@ -12,8 +12,6 @@ RUN mvn -f /home/app/pom.xml --quiet clean package
 #
 FROM openjdk:8-jre-alpine
 
-WORKDIR /home/app
-
 ENV USER=runner \
     UID=10001 \
     GID=10001
@@ -23,12 +21,15 @@ RUN addgroup --gid "$GID" "$USER" \
     --disabled-password \
     --gecos "" \
     --ingroup "$USER" \
+    --home /app \
     --uid "$UID" \
     "$USER"
 
-COPY --from=BUILD /home/app/target/togglr_api-0.9.0-SNAPSHOT.jar /usr/local/lib/app.jar
-EXPOSE 8080
+COPY --from=BUILD --chown=runner:runner /home/app/target/togglr_api-0.9.0-SNAPSHOT.jar /app/app.jar
 
+WORKDIR /app
 USER "$USER"
 
-CMD [ "java", "-jar", "/usr/local/lib/app.jar"]
+EXPOSE 8080
+
+CMD [ "java", "-jar", "/app/app.jar"]
