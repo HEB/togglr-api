@@ -5,7 +5,7 @@ FROM maven AS BUILD
 COPY pom.xml /home/app/
 WORKDIR /home/app
 COPY src /home/app/src
-RUN mvn -f /home/app/pom.xml --quiet clean package
+RUN mvn -f /home/app/pom.xml --quiet -DskipTests=true clean package
 
 #
 # Runtime 

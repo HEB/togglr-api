@@ -1,37 +1,40 @@
 package com.heb.togglr.api.security;
 
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.Profile;
+import com.heb.togglr.api.config.PreflightFilter;
+import com.heb.togglr.api.security.cloud.RestAuthFailureHandler;
+import com.heb.togglr.api.security.cloud.RestAuthSuccessHandler;
+import com.heb.togglr.api.security.jwt.JwtAuthenticationFilter;
+import com.heb.togglr.api.security.jwt.LogoutHandler;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
+import org.springframework.context.annotation.*;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-
-import com.heb.togglr.api.security.cloud.RestAuthSuccessHandler;
-import com.heb.togglr.api.security.cloud.RestAuthFailureHandler;
-import com.heb.togglr.api.security.jwt.JwtAuthenticationFilter;
-import com.heb.togglr.api.security.jwt.LogoutHandler;
-import com.heb.togglr.api.config.PreflightFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Order(99)
 @Profile({"local","clouddev"})
 @Configuration
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true, securedEnabled = true)
-public class CloudSecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class CloudSecurityConfiguration extends ResourceServerConfigurerAdapter {
 
+
+    @Value("${spring.security.oauth2.client.clientId}")
+    private String clientId;
+
+    @Value("${spring.security.oauth2.resource.userInfoUri}")
+    private String userInfoEndPointUri;
 
     private LogoutHandler logutHandler;
     private RestAuthSuccessHandler restAuthSuccessHandler;
     private JwtAuthenticationFilter jwtAuthenticationFilter;
-
 
     public CloudSecurityConfiguration(RestAuthSuccessHandler restAuthSuccessHandler,
                                       JwtAuthenticationFilter jwtAuthenticationFilter,
@@ -39,6 +42,18 @@ public class CloudSecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.logutHandler = logoutHandler;
         this.restAuthSuccessHandler = restAuthSuccessHandler;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
+
+    @Override
+    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+        resources.resourceId("togglr-api");
+    }
+
+    @Primary
+    @Bean
+    public UserInfoTokenServices tokenService() {
+        final UserInfoTokenServices tokenServices = new UserInfoTokenServices(this.userInfoEndPointUri, this.clientId);
+        return tokenServices;
     }
 
     /**
@@ -67,6 +82,8 @@ public class CloudSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/ssologin").permitAll()
+                .antMatchers("/oauth/signin/callback").permitAll()
                 .antMatchers("/error").permitAll()
                 .antMatchers("/features/active").permitAll()
                 .antMatchers("/togglr/update").permitAll()

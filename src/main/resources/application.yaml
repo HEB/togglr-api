@@ -1,0 +1,52 @@
+heb:
+  togglr:
+    jwt:
+      secret:
+        id: 101
+      session:
+        seconds: 600
+      tokenheader: X-TOGGLR-TOKEN
+    oauth:
+      tokenheader: OAUTH-TOKEN
+      userIdentification: ${SSOUSERIDFIELD}
+      oauthEnabled: ${HEBTOGGLROAUTHENABLED}
+logging:
+  level:
+    com:
+      heb: debug
+    default: debug
+  path: logs
+server:
+  error:
+    whitelabel:
+      enabled: false
+  port: 8080
+  servlet:
+    context-path: /togglr-api
+  use-forward-headers: true
+spring:
+  application:
+    name: togglr_api
+  freemarker:
+    enabled: false
+  groovy:
+    template:
+      enabled: false
+  jmx:
+    enabled: false
+  main:
+    banner-mode: 'off'
+  thymeleaf:
+    cache: false
+  security:
+    oauth2:
+      client:
+        clientId: ${SSOCLIENTID}
+        clientSecret: ${SSOCLIENTSECRET}
+        accessTokenUri: ${SSOACCESSTOKENURI}
+        redirectUri: ${SSOREDIRECTURL}
+        userAuthorizationUri: ${SSOUSERAUTHORIZATIONURI} # query params client_id
+        clientAuthenticationScheme: form
+      resource:
+        userInfoUri: ${SSOUSERINFOURI}
+        preferTokenInfo: false
