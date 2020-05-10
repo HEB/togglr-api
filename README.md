@@ -44,6 +44,22 @@ HEB_TOGGLR_CLIENT_SERVER-URL
 SPRING_PROFILES_ACTIVE
 ```
 
+### OAUTH Configurtion
+
+To use the oauth2 functionality, please configure the following env variables for the container. Underscores are not used
+because of an issue with reading environment variables containing underscores in the Spring application.yaml
+```
+HEBTOGGLROAUTHENABLED=false   | Business-specific. For H-E-B, should be set to true when using oauth to override SecurityContext in JwtAuthenticationFilter. To prevent Spring from reading this as an empty string, default is set to false. If this property is missing altogether when Spring loads, it will default to false inside application.yaml.
+OAUTHCLIENTID                 | Client ID provided by oauth provider
+OAUTHCLIENTSECRET             | Client secret provided by oauth provider
+OAUTHACCESSTOKENURI           | URI to receive access token from oauth provider
+OAUTHREDIRECTURL              | Where oauth provider should redirect app to
+OAUTHUSERAUTHORIZATIONURI     | URI to login to oauth provider
+OAUTHUSERINFOURI              | URI to retrieve user information from oauth provider with access code
+OAUTHUSERIDFIELD              | Which field from oauth provider user response (from above env variable) identifies the name/id of the person logged in
+```
+
+
 #### Database Configuration
 
 

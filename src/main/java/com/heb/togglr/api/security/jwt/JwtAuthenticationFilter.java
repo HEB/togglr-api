@@ -18,12 +18,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,7 +32,7 @@ import java.util.ArrayList;
  * @author m228250
  */
 @Component
-public class JwtAuthenticationFilter extends GenericFilterBean {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
@@ -44,6 +42,9 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     @Value("${heb.togglr.app-domain}")
     private String cookieDomain;
 
+    @Value("${heb.togglr.oauth.oauthEnabled:false}")
+    private boolean oauthEnabled;
+
     private JwtService jwtService;
 
     public JwtAuthenticationFilter(JwtService jwtService){
@@ -52,17 +53,15 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
+    public void doFilterInternal(HttpServletRequest httpRequest, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
-        HttpServletRequest httpRequest = (HttpServletRequest)request;
         try {
             String authToken = httpRequest.getHeader(this.tokenHeader);
             if(authToken == null){
                 throw new JwtException("No token present");
             }
             String username = this.jwtService.getUserIdFromToken(authToken);
-
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (username != null && (this.oauthEnabled || SecurityContextHolder.getContext().getAuthentication() == null)) {
                 if (this.jwtService.isValidToken(authToken, true)) {
                     UserDetails user = this.jwtService.getUserFromToken(authToken);
 
@@ -70,14 +69,12 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                             new UsernamePasswordAuthenticationToken(user, authToken, new ArrayList<>());
                     authentication.setDetails(user);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-
                     String jwt = this.jwtService.generateToken(user);
-
                     Cookie cookie = new Cookie(this.tokenHeader, jwt);
                     cookie.setDomain(this.cookieDomain);
                     cookie.setPath("/");
                     cookie.setComment("");
-                    ((HttpServletResponse)response).addCookie(cookie);
+                    response.addCookie(cookie);
 
                 } else {
                     LOGGER.error("INVALID TOKEN FROM USER: " + username);
@@ -85,15 +82,14 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 }
             }
         }catch (JwtException jwtException){
-            HttpServletResponse httpServletResponse = (HttpServletResponse)response;
             Cookie cookie = new Cookie(this.tokenHeader, "");
             cookie.setDomain(this.cookieDomain);
             cookie.setPath("/");
             cookie.setComment("");
             cookie.setMaxAge(0);
-            httpServletResponse.addCookie(cookie);
+            response.addCookie(cookie);
         }
 
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(httpRequest, response);
     }
 }
