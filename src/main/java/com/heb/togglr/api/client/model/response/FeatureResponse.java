@@ -1,10 +1,14 @@
 package com.heb.togglr.api.client.model.response;
 
+import java.util.Date;
+
 public class FeatureResponse {
 
     private int id;
     private String descr;
     private Integer appId;
+    private Date lastToggled;
+    private String toggledBy;
 
     public int getId() {
         return id;
@@ -28,5 +32,21 @@ public class FeatureResponse {
 
     public void setAppId(Integer appId) {
         this.appId = appId;
+    }
+
+    public Date getLastToggled() {
+        return lastToggled;
+    }
+
+    public void setLastToggled(Date lastToggled) {
+        this.lastToggled = lastToggled;
+    }
+
+    public String getToggledBy() {
+        return toggledBy;
+    }
+
+    public void setToggledBy(String toggledBy) {
+        this.toggledBy = toggledBy;
     }
 }

@@ -1,13 +1,9 @@
 package com.heb.togglr.api.entities;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import com.heb.togglr.api.client.model.response.FeatureResponse;
 
 import javax.persistence.*;
-
-import com.heb.togglr.api.client.model.response.FeatureResponse;
+import java.util.*;
 
 @Entity
 @Table(name = "FEATURE", schema = "togglr")
@@ -17,6 +13,8 @@ public class FeatureEntity {
     private Integer appId;
     private Boolean active;
     private Boolean negation;
+    private Date lastToggled;
+    private String toggledBy;
     private Collection<ConfigsEntity> configsById;
     private AppEntity appByAppId;
 
@@ -71,6 +69,26 @@ public class FeatureEntity {
         this.negation = negation;
     }
 
+    @Basic
+    @Column(name = "LAST_TOGGLED")
+    public Date getLastToggled() {
+        return lastToggled;
+    }
+
+    public void setLastToggled(Date lastToggled) {
+        this.lastToggled = lastToggled;
+    }
+
+    @Basic
+    @Column(name = "TOGGLED_BY")
+    public String getToggledBy() {
+        return toggledBy;
+    }
+
+    public void setToggledBy(String toggledBy) {
+        this.toggledBy = toggledBy;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -80,13 +98,15 @@ public class FeatureEntity {
                 Objects.equals(descr, entity.descr) &&
                 Objects.equals(appId, entity.appId) &&
                 Objects.equals(active, entity.active) &&
-                Objects.equals(negation, entity.negation);
+                Objects.equals(negation, entity.negation) &&
+                Objects.equals(lastToggled, entity.lastToggled) &&
+                Objects.equals(toggledBy, entity.toggledBy);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, descr, appId, active, negation);
+        return Objects.hash(id, descr, appId, active, negation, lastToggled, toggledBy);
     }
 
     @OneToMany(mappedBy = "featureByFeatureId", cascade = CascadeType.REMOVE)
@@ -115,6 +135,8 @@ public class FeatureEntity {
         response.setAppId(featureEntity.getAppId());
         response.setDescr(featureEntity.getDescr());
         response.setId(featureEntity.getId());
+        response.setLastToggled(featureEntity.getLastToggled());
+        response.setToggledBy(featureEntity.getToggledBy());
 
         return response;
     }
