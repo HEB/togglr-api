@@ -6,6 +6,7 @@ import org.springframework.data.rest.core.annotation.HandleAfterCreate;
 import org.springframework.data.rest.core.annotation.HandleAfterSave;
 import org.springframework.data.rest.core.annotation.HandleBeforeDelete;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,6 +27,7 @@ public class UpdateEventHandlers {
     }
 
     @HandleAfterSave
+    @Async
     public void handleFeatureSave(FeatureEntity fe) {
         try {
             AppEntity appEntity = fe.getAppByAppId();
@@ -38,6 +40,7 @@ public class UpdateEventHandlers {
     }
 
     @HandleAfterSave
+    @Async
     public void handleConfigSave(ConfigsEntity ce) {
         try {
             AppEntity appEntity = ce.getAppByAppId();
@@ -50,6 +53,7 @@ public class UpdateEventHandlers {
     }
 
     @HandleAfterCreate
+    @Async
     public void handleFeatureCreate(FeatureEntity fe) {
         try {
             AppEntity appEntity = fe.getAppByAppId();
@@ -62,6 +66,7 @@ public class UpdateEventHandlers {
     }
 
     @HandleAfterCreate
+    @Async
     public void handleConfigCreate(ConfigsEntity ce) {
         try {
             AppEntity appEntity = ce.getAppByAppId();
@@ -74,7 +79,8 @@ public class UpdateEventHandlers {
     }
 
     @HandleBeforeDelete
-    public void handleFeaturDelete(FeatureEntity fe) {
+    @Async
+    public void handleFeatureDelete(FeatureEntity fe) {
         try {
             AppEntity appEntity = fe.getAppByAppId();
 
@@ -86,6 +92,7 @@ public class UpdateEventHandlers {
     }
 
     @HandleBeforeDelete
+    @Async
     public void handleConfigDelete(ConfigsEntity ce) {
         try {
             AppEntity appEntity = ce.getAppByAppId();
@@ -107,6 +114,7 @@ public class UpdateEventHandlers {
                     logger.debug("Webhook update successful.");
                 }
             }catch (RestClientException e){
+                logger.debug("An exception happened inside callWebhook. See error log for details.");
                 logger.error(e.getMessage());
             }
         }
